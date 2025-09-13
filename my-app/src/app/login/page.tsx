@@ -339,19 +339,7 @@ const LoginPage = () => {
                     </div>
                   </div>
 
-                  {/* Demo Info */}
-                  <div className="demo-info">
-                    <div className="demo-header">
-                      <div className="demo-icon">
-                        <CheckCircle size={16} />
-                      </div>
-                      <p>Demo Account Ready</p>
-                    </div>
-                    <div className="demo-credentials">
-                      <p><span>Email:</span> demo@safetour.com</p>
-                      <p><span>Password:</span> password</p>
-                    </div>
-                  </div>
+                  
                 </div>
 
                 {/* Signup CTA */}

@@ -1,22 +1,47 @@
+# ----------------------
 # Python
+# ----------------------
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 *.pyd
 *.env
 *.egg-info/
-venv/
+*.egg
+*.whl
 
-# Jupyter
+# Virtual environment
+venv/
+ENV/
+env/
+.venv/
+
+# ----------------------
+# Jupyter / Notebooks
+# ----------------------
 .ipynb_checkpoints
 
-# OS files
+# ----------------------
+# Logs and Databases
+# ----------------------
+*.log
+*.sqlite
+*.db
+*.csv
+*.json
+
+# ----------------------
+# OS / IDE files
+# ----------------------
 .DS_Store
 Thumbs.db
 desktop.ini
-
-# Logs
-*.log
+*.swp
 
 # VSCode
 .vscode/
+.idea/
+
+# Temporary / backup
+*.bak
+*.tmp

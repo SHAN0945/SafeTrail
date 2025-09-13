@@ -6,7 +6,11 @@ import { Shield, MapPin, AlertTriangle, Phone, User, Settings, LogOut, Bell, Cal
 import { useRouter } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
 
+// app/dashboard/page.tsx - Example server component with auth
+import { redirect } from 'next/navigation'
+import { getAuthSession } from '@/lib/auth-helpers'
 
+// Removed duplicate default export DashboardPage to resolve multiple default exports error.
 
 
 

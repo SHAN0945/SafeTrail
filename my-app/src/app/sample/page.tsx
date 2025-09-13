@@ -3,7 +3,12 @@
 
 import { useState, useEffect } from 'react'
 import { Shield, MapPin, AlertTriangle, Phone, User, Settings, LogOut, Bell, Calendar, Activity } from 'lucide-react'
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation'
+import { useSession, signOut } from 'next-auth/react'
+
+
+
+
 
 interface User {
   id: string
@@ -31,9 +36,15 @@ interface Emergency {
   location: string
   timestamp: string
 }
-
 const Dashboard = () => {
+  const { data: session, status } = useSession()
   const router = useRouter()
+
+  useEffect(() => {
+    if (status === 'loading') return
+    if (!session) router.push('/login')
+  }, [session, status, router])
+
   const [user, setUser] = useState<User>({
     id: '1',
     firstName: 'John',
@@ -165,12 +176,13 @@ const Dashboard = () => {
       setIsLoading(false)
     }
   }
-
-  const handleLogout = () => {
-    console.log('Testing: POST /api/auth/logout')
-    router.push('/login')
-  }
-
+const handleLogout = () => signOut({ callbackUrl: '/login' })
+  // const handleLogout = () => {
+  //   console.log('Testing: POST /api/auth/logout')
+  //   router.push('/login')
+  // }
+  if (status === 'loading') return <div>Loading...</div>
+  if (!session) return null
   return (
     <div className="dashboard">
       <div className="dashboard-container">

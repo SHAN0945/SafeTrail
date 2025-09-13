@@ -1,93 +1,23 @@
 'use client'
-
+import { signIn } from 'next-auth/react'
 import { useState } from 'react'
-import { Shield, Eye, EyeOff, Mail, Lock, AlertCircle, ArrowRight, MapPin, Zap, Users, Star, CheckCircle } from 'lucide-react'
+import { Shield, ArrowRight, MapPin, Zap, Users, Star, CheckCircle } from 'lucide-react'
 import { useRouter } from "next/navigation";
-
-interface LoginFormData {
-  email: string
-  password: string
-  rememberMe: boolean
-}
-
-interface FormErrors {
-  email?: string
-  password?: string
-  general?: string
-}
 
 const LoginPage = () => {
   const router = useRouter();
-
-  const [formData, setFormData] = useState<LoginFormData>({
-    email: '',
-    password: '',
-    rememberMe: false
-  })
-  
-  const [errors, setErrors] = useState<FormErrors>({})
-  const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {}
-
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required'
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address'
-    }
-
-    if (!formData.password) {
-      newErrors.password = 'Password is required'
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters'
-    }
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
-  const handleInputChange = (field: keyof LoginFormData, value: string | boolean) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
-    
-    if (errors[field as keyof FormErrors]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }))
-    }
-  }
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    if (!validateForm()) return
-
+  const handleGoogleLogin = async () => {
     setIsLoading(true)
-    setErrors({})
-
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      
-      if (formData.email === 'demo@safetour.com' && formData.password === 'password') {
-        console.log('Login successful:', formData)
-        alert('Login successful! Redirecting to dashboard...')
-      } else {
-        setErrors({ general: 'Invalid email or password. Please try again.' })
-      }
-      
+      await signIn('google', { callbackUrl: '/dashboard' })
     } catch (error) {
       console.error('Login error:', error)
-      setErrors({ general: 'An error occurred. Please try again later.' })
+      alert('Login failed. Please try again.')
     } finally {
       setIsLoading(false)
     }
-  }
-
-  const handleSignup = () => {
-    console.log('Navigate to signup page')
-  }
-
-  const handleForgotPassword = () => {
-    console.log('Navigate to forgot password page')
   }
 
   return (
@@ -222,106 +152,17 @@ const LoginPage = () => {
                     <h3>Welcome Back</h3>
                     <p>Access your safety dashboard and monitoring tools</p>
                   </div>
-
-                  {errors.general && (
-                    <div className="error-alert">
-                      <AlertCircle size={20} />
-                      <span>{errors.general}</span>
-                    </div>
-                  )}
                 </div>
 
                 {/* Login Form */}
                 <div className="form-content">
                   <div className="form-fields">
-                    {/* Email Field */}
-                    <div className="field-group">
-                      <label htmlFor="email">Email Address</label>
-                      <div className="input-container">
-                        <div className="input-icon">
-                          <Mail size={22} />
-                        </div>
-                        <input
-                          id="email"
-                          type="email"
-                          value={formData.email}
-                          onChange={(e) => handleInputChange('email', e.target.value)}
-                          onKeyDown={(e) => e.key === 'Enter' && handleLogin(e)}
-                          placeholder="Enter your email address"
-                          className={errors.email ? 'error' : ''}
-                          disabled={isLoading}
-                        />
-                      </div>
-                      {errors.email && (
-                        <div className="field-error">
-                          <AlertCircle size={16} />
-                          <span>{errors.email}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Password Field */}
-                    <div className="field-group">
-                      <label htmlFor="password">Password</label>
-                      <div className="input-container">
-                        <div className="input-icon">
-                          <Lock size={22} />
-                        </div>
-                        <input
-                          id="password"
-                          type={showPassword ? 'text' : 'password'}
-                          value={formData.password}
-                          onChange={(e) => handleInputChange('password', e.target.value)}
-                          onKeyDown={(e) => e.key === 'Enter' && handleLogin(e)}
-                          placeholder="Enter your password"
-                          className={errors.password ? 'error' : ''}
-                          disabled={isLoading}
-                        />
-                        <button
-                          type="button"
-                          className="password-toggle"
-                          onClick={() => setShowPassword(!showPassword)}
-                          disabled={isLoading}
-                        >
-                          {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
-                        </button>
-                      </div>
-                      {errors.password && (
-                        <div className="field-error">
-                          <AlertCircle size={16} />
-                          <span>{errors.password}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Options */}
-                    <div className="form-options">
-                      <label className="checkbox-label">
-                        <input
-                          type="checkbox"
-                          checked={formData.rememberMe}
-                          onChange={(e) => handleInputChange('rememberMe', e.target.checked)}
-                          disabled={isLoading}
-                        />
-                        <span className="checkbox-text">Remember me for 30 days</span>
-                      </label>
-                      
-                      <button
-                        type="button"
-                        className="forgot-link"
-                        onClick={handleForgotPassword}
-                        disabled={isLoading}
-                      >
-                        Forgot password?
-                      </button>
-                    </div>
-
-                    {/* Submit Button */}
+                    {/* Google Login Button */}
                     <div className="submit-section">
                       <button
                         type="button"
-                        onClick={handleLogin}
-                        className="login-button"
+                        onClick={handleGoogleLogin}
+                        className="google-login-button"
                         disabled={isLoading}
                       >
                         {isLoading ? (
@@ -331,15 +172,30 @@ const LoginPage = () => {
                           </>
                         ) : (
                           <>
-                            Sign In to Dashboard
+                            <svg className="google-icon" viewBox="0 0 24 24">
+                              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                            </svg>
+                            Sign In with Google
                             <ArrowRight size={20} />
                           </>
                         )}
                       </button>
                     </div>
-                  </div>
 
-                  
+                    {/* Demo Info */}
+                    <div className="demo-info">
+                      <div className="demo-header">
+                        <div className="demo-icon">
+                          <Shield size={16} />
+                        </div>
+                        <p>Quick Demo Access</p>
+                      </div>
+                      <p>Click "Sign In with Google" to automatically create your SafeTour account and access the dashboard.</p>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Signup CTA */}
@@ -350,7 +206,7 @@ const LoginPage = () => {
                     className="signup-button"
                     disabled={isLoading}
                   >
-                    Create Your Account
+                    Learn More About SafeTour
                   </button>
                 </div>
               </div>
@@ -549,18 +405,23 @@ const LoginPage = () => {
           padding: 1.5rem;
           transition: all 0.3s ease;
           cursor: pointer;
-        }
-
-        .feature-card:hover {
-          background: rgba(255, 255, 255, 0.1);
-          transform: scale(1.05);
-          border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .feature-card {
           display: flex;
           align-items: flex-start;
           gap: 1rem;
+          animation: fadeInUp 0.6s ease-out forwards;
+          opacity: 0;
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        .feature-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .feature-card:hover {
+          background: rgba(255, 255, 255, 0.1);
+          transform: translateY(-4px) scale(1.02);
+          border-color: rgba(255, 255, 255, 0.2);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
 
         .feature-icon {
@@ -679,6 +540,7 @@ const LoginPage = () => {
           box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
           border: 1px solid rgba(255, 255, 255, 0.2);
           overflow: hidden;
+          animation: slideInRight 0.8s ease-out;
         }
 
         .form-header {
@@ -702,23 +564,6 @@ const LoginPage = () => {
           color: #475569;
         }
 
-        .error-alert {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          margin-top: 1.5rem;
-          padding: 1rem 1.25rem;
-          background: #fef2f2;
-          border: 1px solid #fecaca;
-          border-radius: 12px;
-          color: #dc2626;
-        }
-
-        .error-alert span {
-          font-size: 0.875rem;
-          font-weight: 500;
-        }
-
         .form-content {
           padding: 2rem 2.5rem;
         }
@@ -729,156 +574,15 @@ const LoginPage = () => {
           gap: 1.5rem;
         }
 
-        .field-group {
-          display: flex;
-          flex-direction: column;
-        }
-
-        .field-group label {
-          display: block;
-          font-size: 0.875rem;
-          font-weight: 600;
-          color: #374151;
-          margin-bottom: 0.75rem;
-        }
-
-        .input-container {
-          position: relative;
-          display: flex;
-          align-items: center;
-        }
-
-        .input-icon {
-          position: absolute;
-          left: 1rem;
-          z-index: 1;
-          color: #9ca3af;
-        }
-
-        .input-container input {
-          width: 100%;
-          padding: 1rem 1rem 1rem 3.5rem;
-          font-size: 1.125rem;
-          background: #f8fafc;
-          border: 2px solid #e2e8f0;
-          border-radius: 12px;
-          transition: all 0.2s ease;
-        }
-
-        .input-container input:focus {
-          outline: none;
-          background: white;
-          border-color: #3b82f6;
-          box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
-        }
-
-        .input-container input.error {
-          border-color: #dc2626;
-        }
-
-        .input-container input.error:focus {
-          border-color: #dc2626;
-          box-shadow: 0 8px 25px rgba(220, 38, 38, 0.15);
-        }
-
-        .input-container input:disabled {
-          opacity: 0.7;
-          cursor: not-allowed;
-        }
-
-        .password-toggle {
-          position: absolute;
-          right: 1rem;
-          background: none;
-          border: none;
-          color: #9ca3af;
-          cursor: pointer;
-          padding: 0.5rem;
-          border-radius: 8px;
-          transition: all 0.2s ease;
-        }
-
-        .password-toggle:hover:not(:disabled) {
-          color: #374151;
-          background: #f1f5f9;
-        }
-
-        .password-toggle:disabled {
-          cursor: not-allowed;
-          opacity: 0.5;
-        }
-
-        .field-error {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          margin-top: 0.75rem;
-          color: #dc2626;
-        }
-
-        .field-error span {
-          font-size: 0.875rem;
-          font-weight: 500;
-        }
-
-        .form-options {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding-top: 0.5rem;
-        }
-
-        .checkbox-label {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          cursor: pointer;
-        }
-
-        .checkbox-label input[type="checkbox"] {
-          width: 20px;
-          height: 20px;
-          accent-color: #3b82f6;
-          border: 1px solid #d1d5db;
-          border-radius: 4px;
-        }
-
-        .checkbox-text {
-          font-size: 0.875rem;
-          color: #475569;
-          font-weight: 500;
-        }
-
-        .forgot-link {
-          background: none;
-          border: none;
-          color: #3b82f6;
-          font-size: 0.875rem;
-          font-weight: 600;
-          cursor: pointer;
-          padding: 0.5rem;
-          border-radius: 8px;
-          transition: all 0.2s ease;
-        }
-
-        .forgot-link:hover:not(:disabled) {
-          color: #1d4ed8;
-        }
-
-        .forgot-link:disabled {
-          cursor: not-allowed;
-          opacity: 0.5;
-        }
-
         .submit-section {
           padding-top: 1rem;
         }
 
-        .login-button {
+        .google-login-button {
           width: 100%;
-          background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-          color: white;
-          border: none;
+          background: white;
+          color: #374151;
+          border: 2px solid #e5e7eb;
           padding: 1rem 1.5rem;
           border-radius: 12px;
           font-size: 1.125rem;
@@ -889,24 +593,31 @@ const LoginPage = () => {
           justify-content: center;
           gap: 0.75rem;
           transition: all 0.2s ease;
-          box-shadow: 0 8px 25px rgba(59, 130, 246, 0.25);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
 
-        .login-button:hover:not(:disabled) {
-          background: linear-gradient(135deg, #2563eb, #7c3aed);
-          box-shadow: 0 12px 35px rgba(59, 130, 246, 0.35);
+        .google-login-button:hover:not(:disabled) {
+          background: #f9fafb;
+          border-color: #d1d5db;
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+          transform: translateY(-2px);
         }
 
-        .login-button:disabled {
+        .google-login-button:disabled {
           opacity: 0.7;
           cursor: not-allowed;
+        }
+
+        .google-icon {
+          width: 24px;
+          height: 24px;
         }
 
         .spinner {
           width: 24px;
           height: 24px;
-          border: 2px solid rgba(255, 255, 255, 0.3);
-          border-top: 2px solid white;
+          border: 2px solid rgba(55, 65, 81, 0.3);
+          border-top: 2px solid #374151;
           border-radius: 50%;
           animation: spin 1s linear infinite;
         }
@@ -949,20 +660,11 @@ const LoginPage = () => {
           margin: 0;
         }
 
-        .demo-credentials {
-          display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
-        }
-
-        .demo-credentials p {
+        .demo-info p:last-child {
           font-size: 0.875rem;
           color: #1e40af;
           margin: 0;
-        }
-
-        .demo-credentials span {
-          font-weight: 500;
+          line-height: 1.5;
         }
 
         .signup-section {
@@ -997,11 +699,56 @@ const LoginPage = () => {
           color: #3b82f6;
           background: #eff6ff;
           box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+          transform: translateY(-2px);
         }
 
         .signup-button:disabled {
           cursor: not-allowed;
           opacity: 0.5;
+        }
+
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes slideInRight {
+          from {
+            opacity: 0;
+            transform: translateX(50px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        .left-panel {
+          animation: slideInLeft 0.8s ease-out;
+        }
+
+        @keyframes slideInLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-50px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        /* Focus and accessibility improvements */
+        .google-login-button:focus,
+        .signup-button:focus {
+          outline: none;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
         }
 
         /* Responsive Design */
@@ -1084,12 +831,6 @@ const LoginPage = () => {
             flex-direction: column;
             gap: 1rem;
           }
-
-          .form-options {
-            flex-direction: column;
-            gap: 1rem;
-            align-items: flex-start;
-          }
         }
 
         @media (max-width: 480px) {
@@ -1159,19 +900,6 @@ const LoginPage = () => {
             font-size: 1rem;
           }
 
-          .input-container input {
-            padding: 0.875rem 0.875rem 0.875rem 3rem;
-            font-size: 1rem;
-          }
-
-          .input-icon {
-            left: 0.875rem;
-          }
-
-          .password-toggle {
-            right: 0.875rem;
-          }
-
           .features-grid {
             gap: 0.75rem;
           }
@@ -1199,97 +927,8 @@ const LoginPage = () => {
           }
         }
 
-        /* Focus and accessibility improvements */
-        .login-button:focus,
-        .signup-button:focus,
-        .forgot-link:focus,
-        .password-toggle:focus {
-          outline: none;
-          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-        }
-
-        .checkbox-label:focus-within input[type="checkbox"] {
-          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-        }
-
-        .input-container input:focus {
-          outline: none;
-        }
-
-        /* Enhanced animations */
-        .feature-card {
-          animation: fadeInUp 0.6s ease-out forwards;
-          opacity: 0;
-        }
-
-        .feature-card:nth-child(1) { animation-delay: 0.1s; }
-        .feature-card:nth-child(2) { animation-delay: 0.2s; }
-        .feature-card:nth-child(3) { animation-delay: 0.3s; }
-        .feature-card:nth-child(4) { animation-delay: 0.4s; }
-
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .login-card {
-          animation: slideInRight 0.8s ease-out;
-        }
-
-        @keyframes slideInRight {
-          from {
-            opacity: 0;
-            transform: translateX(50px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        .left-panel {
-          animation: slideInLeft 0.8s ease-out;
-        }
-
-        @keyframes slideInLeft {
-          from {
-            opacity: 0;
-            transform: translateX(-50px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        /* Smooth transitions for interactive elements */
-        .feature-card,
-        .login-button,
-        .signup-button,
-        .input-container input,
-        .password-toggle,
-        .forgot-link {
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Loading state improvements */
-        .login-button:disabled .spinner {
-          margin-right: 0.5rem;
-        }
-
         /* Enhanced hover effects */
-        .feature-card:hover {
-          transform: translateY(-4px) scale(1.02);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .login-button:hover:not(:disabled) {
+        .google-login-button:hover:not(:disabled) {
           transform: translateY(-2px);
         }
 

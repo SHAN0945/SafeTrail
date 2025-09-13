@@ -1,14 +1,14 @@
-// src/app/signup/page.tsx
 'use client'
 
 import { useState } from 'react'
-import { Shield, Eye, EyeOff, Mail, Lock, User, Phone, CheckCircle, ArrowRight, AlertTriangle } from 'lucide-react'
+import { Shield, Eye, EyeOff, Mail, Lock, User, Phone, CheckCircle, ArrowRight, AlertTriangle, MapPin, Zap, Users, Star } from 'lucide-react'
 import { useRouter } from "next/navigation";
 
 const SignupPage = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -27,73 +27,96 @@ const SignupPage = () => {
     }))
   }
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle signup logic here
+    setIsLoading(true)
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    
     console.log('Signup attempt:', formData)
+    setIsLoading(false)
     // router.push('/dashboard')
   }
 
   const features = [
     {
-      icon: <AlertTriangle size={20} />,
+      icon: <Zap size={28} />,
       title: "Real-Time Alerts",
-      description: "Instant notifications about danger zones and safety threats in your area"
+      description: "Instant notifications about danger zones and safety threats",
+      color: "feature-icon-red"
     },
     {
-      icon: <Phone size={20} />,
+      icon: <MapPin size={28} />,
       title: "Emergency SOS",
-      description: "One-touch emergency activation with automatic responder contact"
+      description: "One-touch emergency activation with automatic responder contact",
+      color: "feature-icon-green"
     },
     {
-      icon: <User size={20} />,
+      icon: <Users size={28} />,
       title: "Digital ID",
-      description: "Comprehensive identification for emergency responders"
+      description: "Comprehensive identification for emergency responders",
+      color: "feature-icon-purple"
     },
     {
-      icon: <CheckCircle size={20} />,
+      icon: <CheckCircle size={28} />,
       title: "24/7 Monitoring",
-      description: "Round-the-clock safety monitoring with AI-powered analysis"
+      description: "Round-the-clock safety monitoring with AI-powered analysis",
+      color: "feature-icon-blue"
     }
   ]
 
   return (
-    <div className="signup-page">
+    <>
       <div className="signup-container">
-        {/* Left Side - Features & Branding */}
-        <div className="left-section">
-          <div className="brand-header">
-            <div className="logo">
-              <div className="logo-icon">
-                <Shield size={24} />
-                <div className="status-indicator"></div>
-              </div>
-              <div className="brand-text">
-                <h1>SafeTour</h1>
-                <p>Smart Tourist Safety Platform</p>
+        {/* Animated background elements */}
+        <div className="background-elements">
+          <div className="bg-orb bg-orb-1"></div>
+          <div className="bg-orb bg-orb-2"></div>
+          <div className="bg-orb bg-orb-3"></div>
+        </div>
+
+        {/* Grid pattern overlay */}
+        <div className="grid-overlay"></div>
+
+        {/* Main container */}
+        <div className="main-grid">
+          {/* Left Panel - Branding & Features */}
+          <div className="left-panel">
+            {/* Header */}
+            <div className="header-section">
+              <div className="logo-section">
+                <div className="logo-container">
+                  <div className="logo-icon">
+                    <Shield size={40} />
+                    <div className="status-indicator">
+                      <div className="status-dot"></div>
+                    </div>
+                  </div>
+                  <div className="logo-text">
+                    <h1>SafeTour</h1>
+                    <p>Smart Tourist Safety Platform</p>
+                  </div>
+                </div>
+                
+                <div className="hero-content">
+                  <h2>
+                    Join the Future of{" "}
+                    <span className="gradient-text">Safe Travel</span>
+                  </h2>
+                  <p className="hero-description">
+                    Join thousands of smart travelers who trust SafeTour for comprehensive 
+                    safety monitoring, real-time alerts, and emergency response capabilities worldwide.
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="hero-content">
-            <h2>
-              Join the Future of <br />
-              <span className="gradient-text">Safe Travel</span>
-            </h2>
-            <p>
-              Join thousands of smart travelers who trust SafeTour for comprehensive 
-              safety monitoring, real-time alerts, and emergency response capabilities 
-              worldwide.
-            </p>
-
-            <div className="features-list">
+            {/* Feature Grid */}
+            <div className="features-grid">
               {features.map((feature, index) => (
-                <div 
-                  key={index} 
-                  className="feature-item"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <div className="feature-icon">
+                <div key={index} className="feature-card">
+                  <div className={`feature-icon ${feature.color}`}>
                     {feature.icon}
                   </div>
                   <div className="feature-content">
@@ -104,431 +127,593 @@ const SignupPage = () => {
               ))}
             </div>
 
-            <div className="trust-indicators">
-              <div className="trust-item">
-                <div className="trust-number">50K+</div>
-                <div className="trust-label">Protected Travelers</div>
+            {/* Stats & Social Proof */}
+            <div className="stats-section">
+              <div className="stat-item">
+                <div className="user-avatars">
+                  {[1,2,3,4].map(i => (
+                    <div key={i} className="avatar">{i}</div>
+                  ))}
+                </div>
+                <div className="stat-content">
+                  <div className="stat-number">50K+</div>
+                  <div className="stat-label">Protected Travelers</div>
+                </div>
               </div>
-              <div className="trust-item">
-                <div className="trust-number">180+</div>
-                <div className="trust-label">Countries</div>
+              
+              <div className="stat-item">
+                <div className="stars">
+                  {[1,2,3,4,5].map(i => <Star key={i} size={20} fill="currentColor" />)}
+                </div>
+                <div className="stat-content">
+                  <div className="stat-number">4.9</div>
+                  <div className="stat-label">App Rating</div>
+                </div>
               </div>
-              <div className="trust-item">
-                <div className="trust-number">99.9%</div>
-                <div className="trust-label">Uptime</div>
+              
+              <div className="stat-item">
+                <div className="stat-content">
+                  <div className="stat-number">99.9%</div>
+                  <div className="stat-label">Uptime</div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Right Side - Signup Form */}
-        <div className="right-section">
-          <div className="signup-form-container">
-            <div className="form-header">
-              <h2>Create Your Account</h2>
-              <p>Start your journey to safer travels today</p>
-            </div>
-
-            <form onSubmit={handleSignup} className="signup-form">
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="firstName">First Name</label>
-                  <div className="input-wrapper">
-                    <User size={18} className="input-icon" />
-                    <input
-                      id="firstName"
-                      name="firstName"
-                      type="text"
-                      placeholder="Enter your first name"
-                      value={formData.firstName}
-                      onChange={handleInputChange}
-                      required
-                    />
+          {/* Right Panel - Signup Form */}
+          <div className="right-panel">
+            <div className="form-container">
+              <div className="signup-card">
+                {/* Form Header */}
+                <div className="form-header">
+                  <div className="form-title">
+                    <h3>Create Your Account</h3>
+                    <p>Start your journey to safer travels today</p>
                   </div>
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="lastName">Last Name</label>
-                  <div className="input-wrapper">
-                    <User size={18} className="input-icon" />
-                    <input
-                      id="lastName"
-                      name="lastName"
-                      type="text"
-                      placeholder="Enter your last name"
-                      value={formData.lastName}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
+                {/* Signup Form */}
+                <div className="form-content">
+                  <form onSubmit={handleSignup} className="signup-form">
+                    <div className="form-row">
+                      <div className="field-group">
+                        <label htmlFor="firstName">First Name</label>
+                        <div className="input-container">
+                          <div className="input-icon">
+                            <User size={22} />
+                          </div>
+                          <input
+                            id="firstName"
+                            name="firstName"
+                            type="text"
+                            placeholder="Enter your first name"
+                            value={formData.firstName}
+                            onChange={handleInputChange}
+                            disabled={isLoading}
+                            required
+                          />
+                        </div>
+                      </div>
 
-              <div className="form-group">
-                <label htmlFor="email">Email Address</label>
-                <div className="input-wrapper">
-                  <Mail size={18} className="input-icon" />
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="Enter your email address"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-              </div>
+                      <div className="field-group">
+                        <label htmlFor="lastName">Last Name</label>
+                        <div className="input-container">
+                          <div className="input-icon">
+                            <User size={22} />
+                          </div>
+                          <input
+                            id="lastName"
+                            name="lastName"
+                            type="text"
+                            placeholder="Enter your last name"
+                            value={formData.lastName}
+                            onChange={handleInputChange}
+                            disabled={isLoading}
+                            required
+                          />
+                        </div>
+                      </div>
+                    </div>
 
-              <div className="form-group">
-                <label htmlFor="phone">Phone Number</label>
-                <div className="input-wrapper">
-                  <Phone size={18} className="input-icon" />
-                  <input
-                    id="phone"
-                    name="phone"
-                    type="tel"
-                    placeholder="Enter your phone number"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-              </div>
+                    <div className="field-group">
+                      <label htmlFor="email">Email Address</label>
+                      <div className="input-container">
+                        <div className="input-icon">
+                          <Mail size={22} />
+                        </div>
+                        <input
+                          id="email"
+                          name="email"
+                          type="email"
+                          placeholder="Enter your email address"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          disabled={isLoading}
+                          required
+                        />
+                      </div>
+                    </div>
 
-              <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <div className="input-wrapper">
-                  <Lock size={18} className="input-icon" />
-                  <input
-                    id="password"
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Create a strong password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    required
-                  />
+                    <div className="field-group">
+                      <label htmlFor="phone">Phone Number</label>
+                      <div className="input-container">
+                        <div className="input-icon">
+                          <Phone size={22} />
+                        </div>
+                        <input
+                          id="phone"
+                          name="phone"
+                          type="tel"
+                          placeholder="Enter your phone number"
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                          disabled={isLoading}
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="field-group">
+                      <label htmlFor="password">Password</label>
+                      <div className="input-container">
+                        <div className="input-icon">
+                          <Lock size={22} />
+                        </div>
+                        <input
+                          id="password"
+                          name="password"
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Create a strong password"
+                          value={formData.password}
+                          onChange={handleInputChange}
+                          disabled={isLoading}
+                          required
+                        />
+                        <button
+                          type="button"
+                          className="password-toggle"
+                          onClick={() => setShowPassword(!showPassword)}
+                          disabled={isLoading}
+                        >
+                          {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="field-group">
+                      <label htmlFor="confirmPassword">Confirm Password</label>
+                      <div className="input-container">
+                        <div className="input-icon">
+                          <Lock size={22} />
+                        </div>
+                        <input
+                          id="confirmPassword"
+                          name="confirmPassword"
+                          type={showConfirmPassword ? "text" : "password"}
+                          placeholder="Confirm your password"
+                          value={formData.confirmPassword}
+                          onChange={handleInputChange}
+                          disabled={isLoading}
+                          required
+                        />
+                        <button
+                          type="button"
+                          className="password-toggle"
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          disabled={isLoading}
+                        >
+                          {showConfirmPassword ? <EyeOff size={22} /> : <Eye size={22} />}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="checkbox-group">
+                      <label className="checkbox-label">
+                        <input
+                          type="checkbox"
+                          name="agreeToTerms"
+                          checked={formData.agreeToTerms}
+                          onChange={handleInputChange}
+                          disabled={isLoading}
+                          required
+                        />
+                        <span className="checkbox-text">
+                          I agree to SafeTour's <a href="#" className="link">Terms of Service</a> and <a href="#" className="link">Privacy Policy</a>
+                        </span>
+                      </label>
+                    </div>
+
+                    <div className="submit-section">
+                      <button
+                        type="submit"
+                        className="signup-button"
+                        disabled={isLoading}
+                      >
+                        {isLoading ? (
+                          <>
+                            <div className="spinner"></div>
+                            Creating your account...
+                          </>
+                        ) : (
+                          <>
+                            Create Account
+                            <ArrowRight size={20} />
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+
+                {/* Login CTA */}
+                <div className="login-section">
+                  <p>Already have an account? Welcome back!</p>
                   <button
-                    type="button"
-                    className="password-toggle"
-                    onClick={() => setShowPassword(!showPassword)}
+                    onClick={() => router.push("/login")} 
+                    className="login-button"
+                    disabled={isLoading}
                   >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    Sign In to Dashboard
                   </button>
                 </div>
               </div>
-
-              <div className="form-group">
-                <label htmlFor="confirmPassword">Confirm Password</label>
-                <div className="input-wrapper">
-                  <Lock size={18} className="input-icon" />
-                  <input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
-                    placeholder="Confirm your password"
-                    value={formData.confirmPassword}
-                    onChange={handleInputChange}
-                    required
-                  />
-                  <button
-                    type="button"
-                    className="password-toggle"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  >
-                    {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
-                </div>
-              </div>
-
-              <div className="checkbox-group">
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    name="agreeToTerms"
-                    checked={formData.agreeToTerms}
-                    onChange={handleInputChange}
-                    required
-                  />
-                  <span className="checkmark"></span>
-                  <span className="checkbox-text">
-                    I agree to SafeTour's <a href="#" className="link">Terms of Service</a> and <a href="#" className="link">Privacy Policy</a>
-                  </span>
-                </label>
-              </div>
-
-              
-                  
-              
-
-              <button type="submit" className="signup-btn">
-                Create Account
-                <ArrowRight size={18} />
-              </button>
-            </form>
-
-            <div className="form-footer">
-              <p>Already have an account? <button onClick={() => router.push("/login")} className="link-btn">Sign in here</button></p>
             </div>
-
-            
           </div>
         </div>
       </div>
 
       <style jsx>{`
-        .signup-page {
-          min-height: 100vh;
-          background: linear-gradient(135deg, #2D3779 0%, #4C51BF 25%, #667EEA 50%, #764BA2 100%);
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          overflow-x: hidden;
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
         }
 
         .signup-container {
           min-height: 100vh;
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          max-width: 1400px;
-          margin: 0 auto;
-          background: rgba(255, 255, 255, 0.02);
-          backdrop-filter: blur(20px);
-        }
-
-        .left-section {
-          padding: 3rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
+          background: linear-gradient(135deg, #0f172a 0%, #581c87 50%, #0f172a 100%);
           position: relative;
           overflow: hidden;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
 
-        .left-section::before {
-          content: '';
+        .background-elements {
           position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: 
-            radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-          pointer-events: none;
+          inset: 0;
+          z-index: 1;
         }
 
-        .brand-header {
-          position: relative;
+        .bg-orb {
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(60px);
+          animation: float 20s ease-in-out infinite;
+        }
+
+        .bg-orb-1 {
+          top: 25%;
+          left: 25%;
+          width: 384px;
+          height: 384px;
+          background: rgba(168, 85, 247, 0.2);
+        }
+
+        .bg-orb-2 {
+          bottom: 25%;
+          right: 25%;
+          width: 320px;
+          height: 320px;
+          background: rgba(59, 130, 246, 0.2);
+          animation-delay: 5s;
+        }
+
+        .bg-orb-3 {
+          top: 75%;
+          left: 75%;
+          width: 256px;
+          height: 256px;
+          background: rgba(99, 102, 241, 0.2);
+          animation-delay: 10s;
+        }
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+          50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        }
+
+        .grid-overlay {
+          position: absolute;
+          inset: 0;
+          opacity: 0.2;
           z-index: 2;
+          background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0);
+          background-size: 50px 50px;
         }
 
-        .logo {
+        .main-grid {
+          position: relative;
+          z-index: 10;
+          min-height: 100vh;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .left-panel {
           display: flex;
-          align-items: center;
-          gap: 1rem;
+          flex-direction: column;
+          justify-content: center;
+          padding: 3rem 4rem;
+          animation: slideInLeft 0.8s ease-out;
+        }
+
+        .header-section {
           margin-bottom: 3rem;
         }
 
+        .logo-section {
+          margin-bottom: 2rem;
+        }
+
+        .logo-container {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin-bottom: 2rem;
+        }
+
         .logo-icon {
-          width: 60px;
-          height: 60px;
-          background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
-          border-radius: 16px;
+          position: relative;
+          width: 80px;
+          height: 80px;
+          background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+          border-radius: 24px;
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #ffffff;
-          position: relative;
-          box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+          color: white;
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
         }
 
         .status-indicator {
           position: absolute;
-          top: -4px;
-          right: -4px;
-          width: 16px;
-          height: 16px;
-          background: #22C55E;
-          border: 3px solid rgba(255, 255, 255, 0.2);
+          top: -8px;
+          right: -8px;
+          width: 32px;
+          height: 32px;
+          background: #10b981;
           border-radius: 50%;
-          animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-          0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-          70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
-          100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
-        }
-
-        .brand-text h1 {
-          font-size: 1.75rem;
-          font-weight: 700;
-          color: #ffffff;
-          margin: 0 0 0.25rem 0;
-        }
-
-        .brand-text p {
-          font-size: 0.95rem;
-          color: rgba(255, 255, 255, 0.7);
-          margin: 0;
-        }
-
-        .hero-content {
-          position: relative;
-          z-index: 2;
-        }
-
-        .hero-content h2 {
-          font-size: 2.5rem;
-          font-weight: 800;
-          line-height: 1.2;
-          color: #ffffff;
-          margin-bottom: 1.5rem;
-        }
-
-        .gradient-text {
-          background: linear-gradient(135deg, #60A5FA 0%, #34D399 50%, #F59E0B 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
-
-        .hero-content > p {
-          font-size: 1.1rem;
-          color: rgba(255, 255, 255, 0.8);
-          line-height: 1.6;
-          margin-bottom: 2.5rem;
-          max-width: 450px;
-        }
-
-        .features-list {
-          margin-bottom: 2.5rem;
-        }
-
-        .feature-item {
-          display: flex;
-          align-items: flex-start;
-          gap: 1rem;
-          margin-bottom: 1.5rem;
-          padding: 1rem;
-          background: rgba(255, 255, 255, 0.05);
-          border-radius: 12px;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(10px);
-          transition: all 0.3s ease;
-          animation: slideInLeft 0.6s ease-out both;
-        }
-
-        .feature-item:hover {
-          background: rgba(255, 255, 255, 0.08);
-          transform: translateX(5px);
-        }
-
-        .feature-icon {
-          width: 40px;
-          height: 40px;
-          background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
-          border-radius: 10px;
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #ffffff;
+          border: 4px solid #0f172a;
+        }
+
+        .status-dot {
+          width: 12px;
+          height: 12px;
+          background: white;
+          border-radius: 50%;
+          animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+
+        .logo-text h1 {
+          font-size: 3rem;
+          font-weight: 700;
+          color: white;
+          margin-bottom: 0.5rem;
+        }
+
+        .logo-text p {
+          font-size: 1.25rem;
+          color: #cbd5e1;
+          font-weight: 500;
+        }
+
+        .hero-content h2 {
+          font-size: 3.75rem;
+          font-weight: 700;
+          color: white;
+          line-height: 1.1;
+          margin-bottom: 2rem;
+        }
+
+        .gradient-text {
+          background: linear-gradient(135deg, #fbbf24, #ec4899, #8b5cf6);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .hero-description {
+          font-size: 1.25rem;
+          color: #cbd5e1;
+          line-height: 1.6;
+          margin-bottom: 2rem;
+        }
+
+        .features-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1.5rem;
+          margin-bottom: 3rem;
+        }
+
+        .feature-card {
+          position: relative;
+          overflow: hidden;
+          border-radius: 1rem;
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          padding: 1.5rem;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          display: flex;
+          align-items: flex-start;
+          gap: 1rem;
+          animation: fadeInUp 0.6s ease-out forwards;
+          opacity: 0;
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        .feature-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .feature-card:hover {
+          background: rgba(255, 255, 255, 0.1);
+          transform: translateY(-4px) scale(1.02);
+          border-color: rgba(255, 255, 255, 0.2);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+          width: 56px;
+          height: 56px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           flex-shrink: 0;
+          color: white;
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon-red {
+          background: linear-gradient(135deg, #ef4444, #ec4899);
+        }
+
+        .feature-icon-green {
+          background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .feature-icon-purple {
+          background: linear-gradient(135deg, #8b5cf6, #6366f1);
+        }
+
+        .feature-icon-blue {
+          background: linear-gradient(135deg, #3b82f6, #06b6d4);
         }
 
         .feature-content h4 {
-          font-size: 1rem;
+          font-size: 1.25rem;
           font-weight: 600;
-          color: #ffffff;
-          margin: 0 0 0.25rem 0;
+          color: white;
+          margin-bottom: 0.5rem;
         }
 
         .feature-content p {
           font-size: 0.875rem;
-          color: rgba(255, 255, 255, 0.7);
-          margin: 0;
-          line-height: 1.4;
+          color: #cbd5e1;
+          line-height: 1.5;
         }
 
-        .trust-indicators {
+        .stats-section {
           display: flex;
+          flex-wrap: wrap;
           gap: 2rem;
-          padding: 1.5rem;
-          background: rgba(255, 255, 255, 0.05);
-          border-radius: 16px;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(10px);
+          align-items: center;
         }
 
-        .trust-item {
-          text-align: center;
+        .stat-item {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
         }
 
-        .trust-number {
-          font-size: 1.5rem;
-          font-weight: 700;
-          color: #60A5FA;
-          margin-bottom: 0.25rem;
+        .user-avatars {
+          display: flex;
+          margin-right: 0.5rem;
         }
 
-        .trust-label {
-          font-size: 0.875rem;
-          color: rgba(255, 255, 255, 0.7);
-        }
-
-        @keyframes slideInLeft {
-          from {
-            opacity: 0;
-            transform: translateX(-30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        .right-section {
-          background: rgba(255, 255, 255, 0.95);
-          backdrop-filter: blur(20px);
-          border-left: 1px solid rgba(255, 255, 255, 0.2);
+        .avatar {
+          width: 40px;
+          height: 40px;
+          background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+          border-radius: 50%;
+          border: 2px solid #0f172a;
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 2rem;
+          color: white;
+          font-size: 0.875rem;
+          font-weight: 600;
+          margin-left: -8px;
         }
 
-        .signup-form-container {
+        .avatar:first-child {
+          margin-left: 0;
+        }
+
+        .stars {
+          display: flex;
+          color: #fbbf24;
+          margin-right: 0.5rem;
+        }
+
+        .stat-number {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: white;
+        }
+
+        .stat-label {
+          font-size: 0.875rem;
+          color: #94a3b8;
+        }
+
+        .right-panel {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 2rem 4rem;
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(10px);
+        }
+
+        .form-container {
           width: 100%;
-          max-width: 450px;
+          max-width: 512px;
+        }
+
+        .signup-card {
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(20px);
+          border-radius: 24px;
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          overflow: hidden;
           animation: slideInRight 0.8s ease-out;
         }
 
-        @keyframes slideInRight {
-          from {
-            opacity: 0;
-            transform: translateX(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
         .form-header {
+          padding: 2.5rem 2.5rem 2rem;
+          background: linear-gradient(135deg, #f8fafc, #e0f2fe);
+        }
+
+        .form-title {
           text-align: center;
-          margin-bottom: 2rem;
         }
 
-        .form-header h2 {
-          font-size: 1.875rem;
+        .form-title h3 {
+          font-size: 2.5rem;
           font-weight: 700;
-          color: #1F2937;
-          margin-bottom: 0.5rem;
+          color: #1e293b;
+          margin-bottom: 0.75rem;
         }
 
-        .form-header p {
-          color: #6B7280;
-          font-size: 1rem;
+        .form-title p {
+          font-size: 1.125rem;
+          color: #475569;
+        }
+
+        .form-content {
+          padding: 2rem 2.5rem;
         }
 
         .signup-form {
@@ -543,19 +728,20 @@ const SignupPage = () => {
           gap: 1rem;
         }
 
-        .form-group {
+        .field-group {
           display: flex;
           flex-direction: column;
-          gap: 0.5rem;
         }
 
-        .form-group label {
+        .field-group label {
+          display: block;
           font-size: 0.875rem;
           font-weight: 600;
           color: #374151;
+          margin-bottom: 0.75rem;
         }
 
-        .input-wrapper {
+        .input-container {
           position: relative;
           display: flex;
           align-items: center;
@@ -564,29 +750,30 @@ const SignupPage = () => {
         .input-icon {
           position: absolute;
           left: 1rem;
-          color: #9CA3AF;
           z-index: 1;
+          color: #9ca3af;
         }
 
-        .input-wrapper input {
+        .input-container input {
           width: 100%;
-          padding: 0.875rem 1rem 0.875rem 3rem;
-          border: 2px solid #E5E7EB;
+          padding: 1rem 1rem 1rem 3.5rem;
+          font-size: 1.125rem;
+          background: #f8fafc;
+          border: 2px solid #e2e8f0;
           border-radius: 12px;
-          font-size: 1rem;
-          background: #ffffff;
-          transition: all 0.3s ease;
-          color: #1F2937;
+          transition: all 0.2s ease;
         }
 
-        .input-wrapper input:focus {
+        .input-container input:focus {
           outline: none;
-          border-color: #3B82F6;
-          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+          background: white;
+          border-color: #3b82f6;
+          box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
         }
 
-        .input-wrapper input::placeholder {
-          color: #9CA3AF;
+        .input-container input:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
         }
 
         .password-toggle {
@@ -594,14 +781,21 @@ const SignupPage = () => {
           right: 1rem;
           background: none;
           border: none;
-          color: #9CA3AF;
+          color: #9ca3af;
           cursor: pointer;
-          padding: 0.25rem;
-          transition: color 0.3s ease;
+          padding: 0.5rem;
+          border-radius: 8px;
+          transition: all 0.2s ease;
         }
 
-        .password-toggle:hover {
-          color: #6B7280;
+        .password-toggle:hover:not(:disabled) {
+          color: #374151;
+          background: #f1f5f9;
+        }
+
+        .password-toggle:disabled {
+          cursor: not-allowed;
+          opacity: 0.5;
         }
 
         .checkbox-group {
@@ -617,240 +811,378 @@ const SignupPage = () => {
         }
 
         .checkbox-label input[type="checkbox"] {
-          position: absolute;
-          opacity: 0;
-          width: 0;
-          height: 0;
-        }
-
-        .checkmark {
           width: 20px;
           height: 20px;
-          background: #ffffff;
-          border: 2px solid #E5E7EB;
+          accent-color: #3b82f6;
+          border: 1px solid #d1d5db;
           border-radius: 4px;
-          position: relative;
-          transition: all 0.3s ease;
-          flex-shrink: 0;
           margin-top: 2px;
-        }
-
-        .checkbox-label input[type="checkbox"]:checked + .checkmark {
-          background: #3B82F6;
-          border-color: #3B82F6;
-        }
-
-        .checkbox-label input[type="checkbox"]:checked + .checkmark::after {
-          content: '';
-          position: absolute;
-          left: 6px;
-          top: 2px;
-          width: 6px;
-          height: 10px;
-          border: solid #ffffff;
-          border-width: 0 2px 2px 0;
-          transform: rotate(45deg);
         }
 
         .checkbox-text {
           font-size: 0.875rem;
-          color: #6B7280;
+          color: #475569;
+          font-weight: 500;
         }
 
         .link {
-          color: #3B82F6;
+          color: #3b82f6;
           text-decoration: none;
-          font-weight: 500;
+          font-weight: 600;
         }
 
         .link:hover {
           text-decoration: underline;
         }
 
-        .signup-btn {
-          background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
-          color: #ffffff;
+        .submit-section {
+          padding-top: 1rem;
+        }
+
+        .signup-button {
+          width: 100%;
+          background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+          color: white;
           border: none;
           padding: 1rem 1.5rem;
           border-radius: 12px;
-          font-size: 1rem;
+          font-size: 1.125rem;
           font-weight: 600;
           cursor: pointer;
-          transition: all 0.3s ease;
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 0.5rem;
-          box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
-          margin-top: 1rem;
+          gap: 0.75rem;
+          transition: all 0.2s ease;
+          box-shadow: 0 8px 25px rgba(59, 130, 246, 0.25);
         }
 
-        .signup-btn:hover {
+        .signup-button:hover:not(:disabled) {
+          background: linear-gradient(135deg, #2563eb, #7c3aed);
+          box-shadow: 0 12px 35px rgba(59, 130, 246, 0.35);
           transform: translateY(-2px);
-          box-shadow: 0 8px 30px rgba(59, 130, 246, 0.4);
         }
 
-        .signup-btn:active {
-          transform: translateY(0);
+        .signup-button:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
         }
 
-        .form-footer {
+        .spinner {
+          width: 24px;
+          height: 24px;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          border-top: 2px solid white;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        .login-section {
+          background: #f8fafc;
+          padding: 2rem 2.5rem;
+          border-top: 1px solid #e2e8f0;
           text-align: center;
-          margin-top: 2rem;
-          padding-top: 1.5rem;
-          border-top: 1px solid #E5E7EB;
         }
 
-        .form-footer p {
-          color: #6B7280;
-          font-size: 0.875rem;
+        .login-section p {
+          color: #475569;
+          margin-bottom: 1rem;
+          font-size: 1.125rem;
         }
 
-        .link-btn {
-          background: none;
-          border: none;
-          color: #3B82F6;
-          cursor: pointer;
-          font-weight: 500;
-          text-decoration: none;
-          padding: 0;
-          font-size: inherit;
-        }
-
-        .link-btn:hover {
-          text-decoration: underline;
-        }
-
-        .demo-section {
-          margin-top: 1.5rem;
-        }
-
-        .demo-divider {
-          text-align: center;
-          margin: 1.5rem 0 1rem;
-          position: relative;
-        }
-
-        .demo-divider::before {
-          content: '';
-          position: absolute;
-          top: 50%;
-          left: 0;
-          right: 0;
-          height: 1px;
-          background: #E5E7EB;
-        }
-
-        .demo-divider span {
-          background: rgba(255, 255, 255, 0.95);
-          padding: 0 1rem;
-          color: #9CA3AF;
-          font-size: 0.875rem;
-          position: relative;
-          z-index: 1;
-        }
-
-        .demo-btn {
+        .login-button {
           width: 100%;
-          background: rgba(34, 197, 94, 0.1);
-          border: 1px solid rgba(34, 197, 94, 0.2);
-          color: #059669;
-          padding: 1rem;
+          background: white;
+          border: 2px solid #d1d5db;
+          color: #374151;
+          padding: 0.75rem 1.5rem;
           border-radius: 12px;
+          font-size: 1.125rem;
+          font-weight: 600;
           cursor: pointer;
-          transition: all 0.3s ease;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-          font-weight: 500;
-          position: relative;
+          transition: all 0.2s ease;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
 
-        .demo-btn:hover {
-          background: rgba(34, 197, 94, 0.15);
-          border-color: rgba(34, 197, 94, 0.3);
+        .login-button:hover:not(:disabled) {
+          border-color: #3b82f6;
+          color: #3b82f6;
+          background: #eff6ff;
+          box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+          transform: translateY(-2px);
         }
 
-        .demo-details {
-          position: absolute;
-          right: 1rem;
-          top: 50%;
-          transform: translateY(-50%);
-          text-align: right;
+        .login-button:disabled {
+          cursor: not-allowed;
+          opacity: 0.5;
         }
 
-        .demo-details small {
-          display: block;
-          font-size: 0.75rem;
-          color: #059669;
-          opacity: 0.8;
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
 
+        @keyframes slideInRight {
+          from {
+            opacity: 0;
+            transform: translateX(50px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes slideInLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-50px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        /* Focus and accessibility improvements */
+        .signup-button:focus,
+        .login-button:focus,
+        .password-toggle:focus {
+          outline: none;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        }
+
+        .checkbox-label:focus-within input[type="checkbox"] {
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        }
+
+        .input-container input:focus {
+          outline: none;
+        }
+
+        /* Responsive Design */
         @media (max-width: 1024px) {
-          .signup-container {
+          .main-grid {
             grid-template-columns: 1fr;
           }
 
-          .left-section {
+          .left-panel {
             padding: 2rem;
-            min-height: auto;
+            order: 2;
+          }
+
+          .right-panel {
+            padding: 2rem;
+            order: 1;
+          }
+
+          .features-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+          }
+
+          .hero-content h2 {
+            font-size: 2.5rem;
+          }
+
+          .logo-text h1 {
+            font-size: 2rem;
+          }
+
+          .stats-section {
+            justify-content: center;
+          }
+
+          .form-row {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .left-panel {
+            padding: 1.5rem;
+            text-align: center;
+          }
+
+          .right-panel {
+            padding: 1.5rem;
+          }
+
+          .form-header {
+            padding: 2rem 2rem 1.5rem;
+          }
+
+          .form-content {
+            padding: 1.5rem 2rem;
+          }
+
+          .login-section {
+            padding: 1.5rem 2rem;
           }
 
           .hero-content h2 {
             font-size: 2rem;
           }
 
-          .trust-indicators {
-            gap: 1rem;
+          .form-title h3 {
+            font-size: 2rem;
           }
 
-          .features-list {
+          .logo-container {
+            justify-content: center;
+          }
+
+          .features-grid {
             margin-bottom: 2rem;
+          }
+
+          .feature-card {
+            text-align: left;
+          }
+
+          .stats-section {
+            flex-direction: column;
+            gap: 1rem;
           }
         }
 
-        @media (max-width: 768px) {
-          .form-row {
-            grid-template-columns: 1fr;
+        @media (max-width: 480px) {
+          .left-panel {
+            padding: 1rem;
           }
 
-          .left-section {
-            padding: 1.5rem;
+          .right-panel {
+            padding: 1rem;
           }
 
-          .right-section {
-            padding: 1.5rem;
+          .form-header {
+            padding: 1.5rem 1.5rem 1rem;
+          }
+
+          .form-content {
+            padding: 1rem 1.5rem;
+          }
+
+          .login-section {
+            padding: 1rem 1.5rem;
+          }
+
+          .logo-icon {
+            width: 60px;
+            height: 60px;
+          }
+
+          .logo-icon svg {
+            width: 30px;
+            height: 30px;
+          }
+
+          .status-indicator {
+            width: 24px;
+            height: 24px;
+            top: -6px;
+            right: -6px;
+          }
+
+          .status-dot {
+            width: 8px;
+            height: 8px;
+          }
+
+          .logo-text h1 {
+            font-size: 1.75rem;
+          }
+
+          .logo-text p {
+            font-size: 1rem;
           }
 
           .hero-content h2 {
             font-size: 1.75rem;
           }
 
-          .trust-indicators {
-            flex-direction: column;
-            text-align: left;
-            gap: 1rem;
+          .hero-description {
+            font-size: 1rem;
           }
 
-          .trust-item {
-            text-align: left;
+          .form-title h3 {
+            font-size: 1.75rem;
           }
 
-          .demo-details {
-            position: static;
-            transform: none;
-            text-align: center;
-            margin-top: 0.5rem;
+          .form-title p {
+            font-size: 1rem;
           }
 
-          .demo-btn {
-            flex-direction: column;
+          .input-container input {
+            padding: 0.875rem 0.875rem 0.875rem 3rem;
+            font-size: 1rem;
+          }
+
+          .input-icon {
+            left: 0.875rem;
+          }
+
+          .password-toggle {
+            right: 0.875rem;
+          }
+
+          .features-grid {
             gap: 0.75rem;
           }
+
+          .feature-card {
+            padding: 1rem;
+          }
+
+          .feature-icon {
+            width: 48px;
+            height: 48px;
+          }
+
+          .feature-icon svg {
+            width: 24px;
+            height: 24px;
+          }
+
+          .feature-content h4 {
+            font-size: 1.125rem;
+          }
+
+          .feature-content p {
+            font-size: 0.875rem;
+          }
+        }
+
+        /* Smooth transitions for interactive elements */
+        .feature-card,
+        .signup-button,
+        .login-button,
+        .input-container input,
+        .password-toggle {
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Enhanced hover effects */
+        .signup-button:hover:not(:disabled) {
+          transform: translateY(-2px);
+        }
+
+        .login-button:hover:not(:disabled) {
+          transform: translateY(-2px);
         }
       `}</style>
-    </div>
+    </>
   )
 }
 

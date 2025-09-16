@@ -198,10 +198,13 @@ const LandingPage = () => {
             </div>
             
             <div className="cta-buttons">
-              <button onClick={() => router.push("/login")} className="btn btn-primary">
-                Get Started Free
-                <ArrowRight size={20} />
-              </button>
+  <button
+    onClick={() => window.location.href = "https://safetrail-geofence-sos-zl4u.vercel.app/"}
+    className="btn btn-primary"
+  >
+    Get Started Free <ArrowRight size={20} />
+  </button>
+
               <button onClick={() => handleSmoothScroll('features')} className="btn btn-secondary">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <polygon fill="currentColor" points="5,3 19,12 5,21"/>
